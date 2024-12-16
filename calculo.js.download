@@ -1,0 +1,735 @@
+function openModal(text) {
+    var modal = document.getElementById("modalResumeLei");
+    modal.style.display = "block";
+    document.getElementById('content-modal-resumo').innerHTML = text;
+}
+
+
+$(document).ready(async function () {
+
+
+    var modal = document.getElementById("myModal");
+    var modal2 = document.getElementById("modalResumeLei");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+    var span2 = document.getElementsByClassName("close")[1];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    span2.onclick = function () {
+        modal2.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        if (event.target == modal2) {
+            modal2.style.display = "none";
+        }
+    }
+
+
+    // $(this).tooltip();
+    try {
+        const { state } = await navigator.permissions.query(
+            { name: "clipboard-write" }
+        );
+        return state === "granted";
+    } catch {
+        return false;
+    }
+});
+var atenuante = [];
+
+$("#1 :checkbox").change(function () {
+    let textAreaVal = $(".TextoArtigos").val();
+    if ($(this).prop("checked") == true) {
+        if (!textAreaVal.includes($(this).attr("id"))) {
+            textAreaVal += $(this).attr("id") + "\n";
+        }
+    } else {
+        if (textAreaVal.includes($(this).attr("id"))) {
+            textAreaVal = textAreaVal.replace(
+                $(this).attr("id") + "\n",
+                ""
+            );
+        }
+    }
+
+    $(".TextoArtigos").val(textAreaVal);
+});
+$("#2 :checkbox").change(function () {
+    let textAreaVal = $(".TextoArtigos").val();
+    if ($(this).prop("checked") == true) {
+        if (!textAreaVal.includes($(this).val())) {
+            textAreaVal += $(this).attr("id") + "\n";
+        }
+    } else {
+        if (textAreaVal.includes($(this).attr("id"))) {
+            textAreaVal = textAreaVal.replace(
+                $(this).attr("id") + "\n",
+                ""
+            );
+        }
+    }
+    $("#pena-reducao")[0].value = 0;
+
+    $(".TextoArtigos").val(textAreaVal);
+});
+$("#3 :checkbox").change(function () {
+    let textAreaVal = $(".TextoArtigos").val();
+    if ($(this).prop("checked") == true) {
+        if (!textAreaVal.includes($(this).val())) {
+            textAreaVal += $(this).attr("id") + "\n";
+        }
+    } else {
+        if (textAreaVal.includes($(this).attr("id"))) {
+            textAreaVal = textAreaVal.replace(
+                $(this).attr("id") + "\n",
+                ""
+            );
+        }
+    }
+
+    $(".TextoArtigos").val(textAreaVal);
+});
+
+$("#reu-confesso").change(function () {
+    var pena_txt = document.getElementById("pena");
+    var penaReduzir = 0;
+    $("pena-reducao").val(0);
+
+    if ($("#reu-confesso")[0].checked === false) {
+        $("#reu-confesso")[0].checked = false;
+        calcular();
+    } else {
+        var pena = $("#pena-reducao")[0].value;
+        var Pena = 0;
+        var penaReduzir = 0;
+        var fiancaReduzir = 0;
+        var fiancaC = 0;
+        var pena_txt = document.getElementById("pena");
+        var crimes = document.getElementsByName("crime");
+        var fianca_txt = document.getElementById("fianca");
+        for (var i = 0; i < crimes.length; i++) {
+            if (crimes[i].checked) {
+                var valores_crime = crimes[i].value.split("|");
+                Pena += parseInt(valores_crime[0]);
+                fiancaC += parseInt(valores_crime[2]);
+            }
+        }
+        var sujo = parseInt(
+            0
+            // document.getElementById("sujo").value
+        );
+        if (sujo > 0) {
+            var unidade_sujo = sujo / 10000;
+            if (sujo >= 1000) {
+                fiancaC += (sujo / 100) * 50;
+            }
+        } /*
+pena = parseInt(pena) + parseInt(20);
+if(pena === 0){
+pena = parseInt(pena) - parseInt(20);
+}
+
+if (pena > 70) {
+pena = 70;
+}
+
+$("#pena-reducao").val(pena);
+penaReduzir = Pena * pena / 100;
+pena_txt.value = Pena - penaReduzir;*/
+        if (!atenuante.includes("Réu confesso")) {
+            atenuante += [
+                "\n* 🔹 Réu confesso: Redução de 15% na pena corrente.",
+            ];
+        }
+        calcular();
+    }
+});
+// Kb 21/03/2023
+$("#reu-primario").change(function () {
+    var pena_txt = document.getElementById("pena");
+    var penaReduzir = 0;
+    $("pena-reducao").val(0);
+    if ($("#reu-primario")[0].checked === false) {
+        $("#reu-primario")[0].checked = false;
+        calcular();
+    } else {
+        var pena = $("#pena-reducao")[0].value;
+        var Pena = 0;
+        var penaReduzir = 0;
+        var fiancaReduzir = 0;
+        var fiancaC = 0;
+        var pena_txt = document.getElementById("pena");
+        var crimes = document.getElementsByName("crime");
+        var fianca_txt = document.getElementById("fianca");
+        for (var i = 0; i < crimes.length; i++) {
+            if (crimes[i].checked) {
+                var valores_crime = crimes[i].value.split("|");
+                Pena += parseInt(valores_crime[0]);
+                fiancaC += parseInt(valores_crime[2]);
+            }
+        }
+        var sujo = parseInt(
+            0
+            // document.getElementById("sujo").value
+        );
+        if (sujo > 0) {
+            var unidade_sujo = sujo / 10000;
+            if (sujo >= 1000) {
+                fiancaC += (sujo / 100) * 50;
+            }
+        }
+        /*
+    pena = parseInt(pena) + parseInt(20);
+    if(pena === 0){
+        pena = parseInt(pena) - parseInt(20);
+    }
+
+    if (pena > 70) {
+        pena = 70;
+    }
+
+    $("#pena-reducao").val(pena);
+    penaReduzir = Pena * pena / 100;
+    pena_txt.value = Pena - penaReduzir;*/
+        if (!atenuante.includes("Réu primário")) {
+            atenuante += [
+                "\n* 🔹 Réu primário: Redução de 50% na pena corrente.",
+            ];
+        }
+        calcular();
+    }
+});
+// Kb 21/03/2023
+
+// Kb 21/03/2023
+function recalcularPena() {
+    var pena_txt = document.getElementById("pena");
+    var fianca_txt = document.getElementById("fianca");
+    var Fianca = 0;
+    var penaRed = $("#pena-reducao")[0].value;
+    var Pena = 0;
+    var crimes = document.getElementsByName("crime");
+    for (var i = 0; i < crimes.length; i++) {
+        if (crimes[i].checked) {
+            var valores_crime = crimes[i].value.split("|");
+            Pena += parseInt(valores_crime[0]);
+            Fianca += parseInt(valores_crime[2]);
+            /*Condicional += parseInt(valores_crime[0])*4; */
+            Condicional = "NÃO USAR";
+        }
+    }
+
+    /* dinheiro sujo */
+    var sujo = parseInt(
+        0
+        // document.getElementById("sujo").value
+    );
+    if (sujo > 0) {
+        var unidade_sujo = sujo / 10000;
+        if (sujo >= 1000) {
+            Fianca += (sujo / 100) * 50;
+        }
+    }
+    if (Pena > 100) {
+        Pena = 100;
+    }
+    pena_txt.value = Pena;
+    if (
+        isNaN(Fianca)
+    ) {
+        fianca_txt.value = "INAFIANÇÁVEL";
+    } else {
+        fianca_txt.value =
+            "R$" +
+            Fianca.toLocaleString("pt-BR", {
+                minimumFractionDigits: 0,
+            });
+    }
+}
+// Kb 21/03/2023
+$("#advogado-30").change(function () {
+    if ($(".TextoArtigos")[0].value == "") {
+        $("#advogado-30")[0].checked = false;
+        $("#alerta")[0].style.display = "block";
+        const timeOut = setTimeout(crimesPena, 3000);
+    } else {
+        if ($("#adv_rg")[0].value == "") {
+            $("#advogado-30")[0].checked = false;
+            $("#alerta-1")[0].style.display = "block";
+            const timeOut = setTimeout(advConst, 3000);
+        } else {
+            if ($("#advogado-30")[0].checked === true) {
+                var pena = $("#pena-reducao")[0].value;
+                var Pena = 0;
+                var penaReduzir = 0;
+                var fiancaReduzir = 0;
+                var fiancaC = 0;
+                var pena_txt = document.getElementById("pena");
+                var crimes =
+                    document.getElementsByName("crime");
+                var fianca_txt =
+                    document.getElementById("fianca");
+                for (var i = 0; i < crimes.length; i++) {
+                    if (crimes[i].checked) {
+                        var valores_crime =
+                            crimes[i].value.split("|");
+                        Pena += parseInt(valores_crime[0]);
+                        fiancaC += parseInt(valores_crime[2]);
+                    }
+                }
+                var sujo = parseInt(
+                    0
+                    // document.getElementById("sujo").value
+                );
+                if (sujo > 0) {
+                    var unidade_sujo = sujo / 10000;
+                    if (sujo >= 1000) {
+                        fiancaC += (sujo / 100) * 50;
+                    }
+                }
+
+                fiancaReduzir = (fiancaC * 30) / 100;
+                fiancaReduzir = fiancaC - fiancaReduzir;
+                if (
+                    isNaN(fiancaReduzir)
+                ) {
+                    fianca_txt.value = "INAFIANÇÁVEL";
+                } else {
+                    fianca_txt.value =
+                        "R$" +
+                        fiancaReduzir.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 0,
+                        });
+                }
+
+                $(".advogado-1")[0].style.display = "block";
+                $(".advogado-2")[0].style.display = "block";
+
+                if (
+                    !atenuante.includes("Advogado constituído")
+                ) {
+                    atenuante += [
+                        "\n* 🔹 Advogado constituído: Redução de 30% na pena total.",
+                    ];
+                }
+                calcular();
+            } else {
+                $(".advogado-1")[0].style.display = "none";
+                $(".advogado-2")[0].style.display = "none";
+                $("#reu-confesso")[0].checked = false;
+                $("#reu-primario")[0].checked = false;
+                calcular();
+            }
+        }
+    }
+});
+
+$("#advogado-criminoso").change(function () {
+
+    if ($("#advogado-criminoso")[0].checked === true) {
+        var pena = $("#pena-reducao")[0].value;
+        var Pena = 0;
+        var penaReduzir = 0;
+        var fiancaReduzir = 0;
+        var fiancaC = 0;
+        var pena_txt = document.getElementById("pena");
+        var crimes =
+            document.getElementsByName("crime");
+        var fianca_txt =
+            document.getElementById("fianca");
+        for (var i = 0; i < crimes.length; i++) {
+            if (crimes[i].checked) {
+                var valores_crime =
+                    crimes[i].value.split("|");
+                Pena += parseInt(valores_crime[0]);
+                fiancaC += parseInt(valores_crime[2]);
+            }
+        }
+        if (
+            !atenuante.includes("Advogado sendo preso: Necessária cassação de OAC")
+        ) {
+            atenuante += [
+                "\n* 🔹Advogado sendo preso: Necessária cassação de OAC.",
+            ];
+        }
+        calcular();
+    } else {
+        calcular();
+    }
+});
+
+$("#fiancaP").change(function () {
+    if ($(".TextoArtigos")[0].value == "") {
+        $("#fiancaP")[0].checked = false;
+        $("#alerta")[0].style.display = "block";
+        const timeOut = setTimeout(crimesPena, 3000);
+    } else {
+        fianca_txt = document.getElementById("fianca");
+        if ($("#adv_rg")[0].value == "") {
+            $("#advogado-30")[0].checked = false;
+            $("#fiancaP")[0].checked = false;
+            $("#alerta-1")[0].style.display = "block";
+            const timeOut = setTimeout(advConst, 3000);
+        } else {
+            if (
+                $("#fiancaP")[0].checked === true &&
+                fianca_txt.value != "INAFIANÇÁVEL"
+            ) {
+                atenuante += ["\n* 🔹 Fiança paga"];
+                var pena_txt = document.getElementById("pena");
+                pena_txt.value = 1;
+                $("#reu-confesso")[0].checked = false;
+                $("#reu-primario")[0].checked = false;
+                $("#advogado-30")[0].checked = false;
+            } else {
+                $("#alerta-2")[0].style.display = "block";
+                const timeOut = setTimeout(inafiancavel, 3000);
+                $("#fiancaP")[0].checked = false;
+                calcular();
+            }
+        }
+    }
+});
+
+function calcular() {
+    var Pena = 0;
+    var Multa = 0;
+    var Fianca = 0;
+    var penaReduzir = 0;
+    var penaRe = 0;
+    var Condicional = "NÃO USAR";
+    var fiancaReduzir = 0;
+    /* Crimes */
+    var crimes = document.getElementsByName("crime");
+    for (var i = 0; i < crimes.length; i++) {
+        if (crimes[i].checked) {
+            var valores_crime = crimes[i].value.split("|");
+            Pena += parseInt(valores_crime[0]);
+            Multa += parseInt(valores_crime[1]);
+            Fianca += parseInt(valores_crime[2]);
+            /*Condicional += parseInt(valores_crime[0])*4; */
+            Condicional = "NÃO USAR";
+        }
+    }
+
+    /* dinheiro sujo */
+    var sujo = parseInt(
+        0
+        // document.getElementById("sujo").value
+    );
+    if (sujo > 0) {
+        var unidade_sujo = sujo / 10000;
+        if (sujo >= 1000) {
+            Multa += (sujo / 100) * 50;
+            Fianca += (sujo / 100) * 50;
+        }
+    }
+
+    var fianca_txt = document.getElementById("fianca");
+    var pena_txt = document.getElementById("pena");
+    if ($("#advogado-30")[0].checked === true) {
+        penaRe = penaRe + 30;
+        fiancaReduzir = (Fianca * 30) / 100;
+        Fianca = Fianca - fiancaReduzir;
+
+        multaReduzir = (Multa * 30) / 100;
+        Multa = Multa - multaReduzir;
+
+        if (
+            isNaN(fiancaReduzir)
+        ) {
+            fianca_txt.value = "INAFIANÇÁVEL";
+        } else {
+            fianca_txt.value =
+                "R$" +
+                fiancaReduzir.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 0,
+                });
+        }
+    }
+
+    if (penaRe > 0) {
+        penaReduzir = (Pena * parseInt(penaRe)) / 100;
+        pena_txt.value = Math.ceil(Pena - penaReduzir);
+        Pena = Math.ceil(Pena - penaReduzir);
+    } else {
+        pena_txt.value = Pena;
+    }
+
+    if ($("#reu-primario")[0].checked === true) {
+        penaRe = 50;
+        if (penaRe > 0) {
+            penaReduzir = (Pena * parseInt(penaRe)) / 100;
+            pena_txt.value = Math.ceil(Pena - penaReduzir);
+            Pena = Math.ceil(Pena - penaReduzir);
+        } else {
+            pena_txt.value = Pena;
+        }
+    }
+    if ($("#reu-confesso")[0].checked === true) {
+        penaRe = 15;
+
+        if (penaRe > 0) {
+            penaReduzir = (Pena * parseInt(penaRe)) / 100;
+            pena_txt.value = Math.ceil(Pena - penaReduzir);
+            Pena = Math.ceil(Pena - penaReduzir);
+        } else {
+            pena_txt.value = Pena;
+        }
+    }
+
+    var multa_txt = document.getElementById("multa");
+    multa_txt.value =
+        "R$" +
+        Multa.toLocaleString("pt-BR", {
+            minimumFractionDigits: 0,
+        });
+    if (
+        isNaN(Fianca)
+    ) {
+        fianca_txt.value = "INAFIANÇÁVEL";
+    } else {
+        fianca_txt.value =
+            "R$" +
+            Fianca.toLocaleString("pt-BR", {
+                minimumFractionDigits: 0,
+            });
+    }
+
+    if ($("#advogado-criminoso")[0].checked === true) {
+        Pena = Pena * 3;
+        pena_txt.value = Pena;
+        if (!isNaN(Fianca)) {
+            Fianca = Fianca * 3;
+            fianca_txt.value = "R$" + Fianca.toLocaleString("pt-BR", {
+                minimumFractionDigits: 0,
+            });
+        }
+
+        Multa = Multa * 3;
+        multa_txt.value = "R$" + Multa.toLocaleString("pt-BR", {
+            minimumFractionDigits: 0,
+        });
+    }
+
+    var condicional_txt =
+        document.getElementById("condicional");
+    condicional_txt.value = Condicional.toLocaleString(
+        "pt-BR",
+        { minimumFractionDigits: 0 }
+    );
+}
+function limpar() {
+    var crimes = document.getElementsByName("crime");
+    for (var i = 0; i < crimes.length; i++) {
+        crimes[i].checked = false;
+    }
+    $("#reu-primario")[0].checked = false;
+    $("#reu-confesso")[0].checked = false;
+    $("#advogado-30")[0].checked = false;
+    $("#advogado-criminoso")[0].checked = false;
+    $("#fianca")[0].checked = false;
+    $("#copiado")[0].style.display = "none";
+    $("#fianca")[0].value = "";
+    $("#pena")[0].value = "";
+    $("#multa")[0].value = "";
+    // $("#sujo")[0].value = "";
+    $("#condicional")[0].value = "NÃO USAR";
+    $("#copy-text")[0].value = "";
+    $("#itens")[0].value = "";
+    $(".advogado-1")[0].style.display = "none";
+    $(".advogado-2")[0].style.display = "none";
+    $("#preso_nome").val("");
+    $("#preso_rg").val("");
+    $("#multa").val("");
+    $("#adv_rg").val("");
+    $("#pena-reducao").val(0);
+}
+$("#copy").click(async function () {
+    if (
+        $(".TextoArtigos").val() != "" &&
+        $("#preso_nome").val() != "" &&
+        $("#preso_rg").val() != "" &&
+        $("#pena").val() != "" &&
+        $("#multa").val() != ""
+    ) {
+        calcular();
+        var fiancaTxT = "";
+
+        var Pena = 0;
+        var Fianca = 0;
+        var fiancaTxt = "";
+        var crimes = document.getElementsByName("crime");
+        for (var i = 0; i < crimes.length; i++) {
+            if (crimes[i].checked) {
+                var valores_crime = crimes[i].value.split("|");
+                Pena += parseInt(valores_crime[0]);
+                Fianca += parseInt(valores_crime[2]);
+            }
+        }
+        if (Pena > 100) {
+            Pena = 100;
+        }
+
+        if ($("#advogado-30")[0].checked === true) {
+            if (Pena != 0) {
+                if (
+                    isNaN(Fianca)
+                ) {
+                    fiancaTxT = "INAFIANÇÁVEL";
+                    $("#rFianca").html("FIANÇA: " + fiancaTxT);
+                } else {
+                    fiancaTxT =
+                        "R$" +
+                        Fianca.toLocaleString("pt-BR", {
+                            minimumFractionDigits: 0,
+                        }) +
+                        "(70%)";
+                    $("#rFianca").html("FIANÇA: " + fiancaTxT);
+                }
+            }
+        }
+
+        porcentagemPena = 100;
+        porcentagemMulta = 100;
+        redPer =
+            porcentagemPena - $("#pena-reducao")[0].value;
+        redMulta =
+            porcentagemMulta - $("#reducaoMulta").val();
+
+        var text = document.getElementById("discord-text");
+        document.getElementById('discord-text').value = "";
+        var today = new Date();
+        var mes = today.getMonth() + 1;
+        var porte = "";
+        var fianca = "";
+
+        if ($("#fiancaP") == 1) {
+            fianca = "Sim";
+        } else {
+            fianca = "Não";
+        }
+
+        porte = "N/A";
+        if (!atenuante) {
+            text.innerHTML =
+                "```md" +
+                +"\n\n# INFORMAÇÕES DO PRESO:" +
+                "\n* NOME: " +
+                $("#preso_nome").val() +
+                "\n* RG: " +
+                $("#preso_rg").val() +
+                "\n\n# PENA TOTAL: " +
+                Pena +
+                " meses " +
+                "\n# MULTA: " +
+                $("#multa").val() +
+                "" +
+                "\n\n# CRIMES: \n" +
+                $(".TextoArtigos").val() +
+                "\n# 🤵 ADVOGADO: " +
+                $("#adv_rg").val() +
+                "(RG)" +
+                "\n* DATA: " +
+                today.getDate() +
+                "/" +
+                mes +
+                "/" +
+                today.getFullYear() +
+                "```";
+        } else {
+            text.innerHTML =
+                "```md" +
+                "\n\n# INFORMAÇÕES DO PRESO:" +
+                "\n* NOME: " +
+                $("#preso_nome").val() +
+                "\n* RG: " +
+                $("#preso_rg").val() +
+                "\n\n# PENA TOTAL: " +
+                Pena +
+                " meses " +
+                "\n# MULTA: " +
+                $("#multa").val() +
+                "" +
+                "\n\n# CRIMES: \n" +
+                $(".TextoArtigos").val() +
+                "\n\n# ATENUANTES: \n" +
+                atenuante +
+                "\n\n# 📋 PORTE DE ARMA: " +
+                porte +
+                "\n# 🤵 ADVOGADO: " +
+                $("#adv_rg").val() +
+                "(RG)" +
+                "\n* DATA: " +
+                today.getDate() +
+                "/" +
+                mes +
+                "/" +
+                today.getFullYear() +
+                "```";
+        }
+
+        const blobt = new Blob([text.innerHTML], {
+            type: "text/plain",
+        });
+
+        await setToClipboard(blobt);
+    } else {
+    }
+});
+
+$("#copy-image").click(async function () {
+    if ($("#foto")[0].src) {
+        const data = await fetch($("#foto")[0].src);
+        const blob = await data.blob();
+        await setToClipboard(blob);
+    }
+});
+
+$("#copy-inv").click(async function () {
+    if ($("#inv")[0].src) {
+        const data = await fetch($("#inv")[0].src);
+        const blob = await data.blob();
+        await setToClipboard(blob);
+    }
+});
+const setToClipboard = async (blob) => {
+    const dataItem = [
+        new ClipboardItem({ [blob.type]: blob }),
+    ];
+    await navigator.clipboard.write(dataItem);
+};
+
+function tirarPena() {
+    $("#penamaxima")[0].style.display = "none";
+}
+
+function crimesPena() {
+    $("#alerta")[0].style.display = "none";
+}
+function advConst() {
+    $("#alerta-1")[0].style.display = "none";
+}
+function inafiancavel() {
+    $("#alerta-2")[0].style.display = "none";
+}
+function tirarBloco() {
+    $("#copiado")[0].style.display = "none";
+}
